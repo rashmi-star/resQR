@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>resQR Registration</title>
+    <link rel="stylesheet" href="resQR_registration.css" />
+  </head>
+  <body class="resQR-background">
+    <div class="container" id="participantsContainer" data-form-counter="1">
+      <!--Owner Details-->
+      <div id="myForm">
+        <div class="form-step form-step-active">
+          <div class="registration-heading-container">
+            <div class="logo">
+              <img
+                src="resQR-logo-design.png"
+                class="logo-size"
+                alt="resQR-logo"
+              />
+            </div>
+            <div class="registration-heading">
+              <div style="text-align: center">
+                <h2>resQR Registration Form</h2>
+              </div>
+            </div>
+          </div>
+          <div class="registration-form-row">
+            <input
+              name="ownerVIN"
+              type="text"
+              placeholder="Enter Vehicle Identification Number (VIN)"
+            />
+          </div>
+          <div class="registration-form-row">
+            <input
+              type="text"
+              name="ownerFullName"
+              placeholder="Enter Owner Full Name"
+            />
+          </div>
+          <div class="registration-form-row">
+            <input
+              type="email"
+              name="ownerEmailId"
+              placeholder="Enter Owner Email Id"
+            />
+            <input
+              type="tel"
+              name="ownerPhoneNumber"
+              placeholder="Enter Owner Phone Number"
+            />
+          </div>
+          <div class="registration-form-gender">
+            <div class="registration-form-equal-spacing">
+              <div class="registration-form-col">
+                <p>Owner Birthdate</p>
+                <input
+                  type="date"
+                  name="ownerDateOfBirth"
+                  placeholder="Enter your DOB"
+                  style="height: 13px; margin: 0px"
+                />
+              </div>
+            </div>
+            <div class="registration-form-equal-spacing">
+              <div class="registration-form-col">
+                <p>Owner Blood Group</p>
+                <select name="ownerBloodGroup">
+                  <option value="null"></option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                </select>
+              </div>
+            </div>
+            <div class="registration-form-equal-spacing">
+              <div class="registration-form-col">
+                <p>Owner Gender</p>
+                <div class="registration-form-dob">
+                  <div class="registration-form-row">
+                    <input
+                      style="height: 13px; margin: 3px"
+                      type="radio"
+                      name="ownerGender"
+                      value="male"
+                    />
+                    <p>Male</p>
+                  </div>
+                  <div class="registration-form-row">
+                    <input
+                      style="height: 13px; margin: 3px"
+                      type="radio"
+                      name="ownerGender"
+                      value="female"
+                    />
+                    <p>Female</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: row-reverse">
+            <button
+              class="nextBtn"
+              style="width: 30%"
+              onclick="addDependentForm()"
+            >
+              Add Dependents
+            </button>
+          </div>
+        </div>
+        <!-- Dependent Details -->
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
+
+    <script>
+      // // Initialize Firebase
+
+      function addDependentForm() {
+        var formCounter = parseInt(
+          document
+            .getElementById("participantsContainer")
+            .getAttribute("data-form-counter")
+        );
+
+        if (formCounter <= 5) {
+          // Hide the currently active form
+          var activeForm = document.querySelector(".form-step-active");
+          activeForm.classList.remove("form-step-active");
+
+          // Generate HTML for the new form using template literals
+          var newFormHTML = `
+     <div class="form-step form-step-active" id="participantForm${formCounter}">
+       <div class="registration-heading-container">
+         <div class="logo">
+           <img src="resQR-logo-design.png" class="logo-size" alt="resQR-logo" />
+         </div>
+         <div class="registration-heading">
+           <div style="text-align: center">
+             <h2>Dependent Details</h2>
+           </div>
+         </div>
+       </div>
+         <div class="dependent-details">
+            <div class="registration-form-dependent-type">
+              <div class="registration-form-col">
+                <p>Dependent Type</p>
+                <select name="dependentType" id="dependentType">
+                  <option value="null"></option>
+                  <option value="Family">Family</option>
+                  <option value="Friends">Friends</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="registration-form-row">
+              <input
+                type="text"
+                name="dependentFullName"
+                placeholder="Enter Dependent Full Name"
+              />
+            </div>
+            <div class="registration-form-row">
+              <input
+                type="email"
+                name="dependentEmailId"
+                placeholder="Enter Dependent Email Id"
+              />
+              <input
+                type="tel"
+                name="dependentPhoneNumber"
+                placeholder="Enter Dependent Phone Number"
+              />
+            </div>
+            <div class="registration-form-gender">
+              <div class="registration-form-equal-spacing">
+                <div class="registration-form-col">
+                  <p>Dependent Birthdate</p>
+                  <input
+                    type="date"
+                    name="dependentDateOfBirth"
+                    placeholder="Enter Dependent DOB"
+                    style="height: 13px; margin: 0px"
+                  />
+                </div>
+              </div>
+              <div class="registration-form-equal-spacing">
+                <div class="registration-form-col">
+                  <p>Dependent Blood Group</p>
+                  <select name="dependentBloodGroup">
+                    <option value="null"></option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                  </select>
+                </div>
+              </div>
+              <div class="registration-form-equal-spacing">
+                <div class="registration-form-col">
+                  <p>Dependent Gender</p>
+                  <div class="registration-form-dob">
+                    <div class="registration-form-row">
+                      <input
+                        style="height: 13px; margin: 3px"
+                        type="radio"
+                        name="dependentGender"
+                        value="male"
+                      />
+                      <p>Male</p>
+                    </div>
+                    <div class="registration-form-row">
+                      <input
+                        style="height: 13px; margin: 3px"
+                        type="radio"
+                        name="dependentGender"
+                        value="female"
+                      />
+                      <p>Female</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column">
+              <div
+                style="
+                  display: flex;
+                  flex-direction: row;
+                  justify-content: space-between;
+                "
+              >
+                <button  type="button" id="prevBtn" class="prevBtn" style="width: 30%" onclick="previousDependentForm(${formCounter})">Previous</button>
+                <button
+                  type="button"
+                  id="nextBtn"
+                  style="width: 30%"
+                  onclick="addDependentForm()"
+                >
+                  Add Dependents ${formCounter} / 5
+                </button>
+              </div>
+              <div style="display: flex; flex-direction: row-reverse">
+                <button
+                  type="submit"
+                  id="submit-btn"
+                  style="width: 30%; background: black; color: #ffd700"
+                  onclick="collectFormData()"
+                >
+                  Generate QR
+                </button>
+                <!-- Display the QR code -->
+                <div id="qrcode"></div>
+              </div>
+            </div>
+          </div>
+       </div>
+     </div>
+   `;
+
+          // Create a new div and set its innerHTML with the generated HTML
+          var newDiv = document.createElement("div");
+          newDiv.innerHTML = newFormHTML;
+
+          // Append the new form to the myForm container
+          document.getElementById("myForm").appendChild(newDiv);
+
+          // Increment the form counter
+          formCounter++;
+          document
+            .getElementById("participantsContainer")
+            .setAttribute("data-form-counter", formCounter);
+        } else {
+          alert("You can add up to 5 dependents.");
+        }
+      }
+
+      function previousDependentForm(formCounter) {
+        if (formCounter > 1) {
+          // Remove the current form step
+          var currentForm = document.getElementById(
+            "participantForm" + formCounter
+          );
+          currentForm.remove();
+
+          // Show the previous form step
+          formCounter--;
+          document
+            .getElementById("participantsContainer")
+            .setAttribute("data-form-counter", formCounter);
+
+          // Update the form steps display
+          // updateFormSteps();
+        }
+      }
+
+      function updateFormSteps() {
+        var formCounter = parseInt(
+          document
+            .getElementById("participantsContainer")
+            .getAttribute("data-form-counter")
+        );
+
+        formSteps.forEach((formStep) => {
+          formStep.classList.remove("form-step-active");
+        });
+
+        formSteps[formCounter - 1].classList.add("form-step-active");
+      }
+
+      function collectFormData() {
+        var formData = [];
+        var formCounter = parseInt(
+          document
+            .getElementById("participantsContainer")
+            .getAttribute("data-form-counter")
+        );
+
+        for (var i = 1; i < formCounter; i++) {
+          var formId = "participantForm" + i;
+          var form = document.getElementById(formId);
+
+          // Collect form data and add to formData array
+          var formDataEntry = {
+            dependentType: form.querySelector('[name="dependentType"]').value,
+            dependentFullName: form.querySelector('[name="dependentFullName"]')
+              .value,
+            dependentEmailId: form.querySelector('[name="dependentEmailId"]')
+              .value,
+            dependentPhoneNumber: form.querySelector(
+              '[name="dependentPhoneNumber"]'
+            ).value,
+            dependentDateOfBirth: form.querySelector(
+              '[name="dependentDateOfBirth"]'
+            ).value,
+            dependentBloodGroup: form.querySelector(
+              '[name="dependentBloodGroup"]'
+            ).value,
+            dependentGender: form.querySelector('[name="dependentGender"]')
+              .value,
+          };
+
+          formData.push(formDataEntry);
+        }
+
+        const uniqueKey = uuidv4();
+
+        fetch(`/encrypt?key=${uniqueKey}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            encryptedKey = data["encryptedText"];
+            console.log(encryptedKey);
+            // hospitalsList = data;
+          })
+          .catch((error) => console.error("Error:", error));
+
+        // Create JSON object
+        let jsonObject = {
+          resQR_user: {
+            ownerVIN: document.querySelector('[name="ownerVIN"]').value,
+            ownerFullName: document.querySelector('[name="ownerFullName"]')
+              .value,
+            ownerEmailId: document.querySelector('[name="ownerEmailId"]').value,
+            ownerPhoneNumber: document.querySelector(
+              '[name="ownerPhoneNumber"]'
+            ).value,
+            ownerDateOfBirth: document.querySelector(
+              '[name="ownerDateOfBirth"]'
+            ).value,
+            ownerBloodGroup: document.querySelector('[name="ownerBloodGroup"]')
+              .value,
+            ownerGender: document.querySelector('[name="ownerGender"]:checked')
+              .value,
+            dependents: formData,
+            resQRText: uniqueKey,
+          },
+        };
+
+        fetchData(jsonObject);
+      }
+
+      async function fetchData(jsonObject) {
+        try {
+          const response = await fetch("/generate_qr", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(jsonObject),
+          });
+
+          if (response.ok) {
+            // Assuming the server responds with the image as blob
+            const blob = await response.blob();
+            const resQR_unique_key = jsonObject.resQR_user["resQRText"];
+
+            // Create a URL for the blob
+            const imageUrl = URL.createObjectURL(blob);
+
+            // Use the imageUrl as needed, for example, displaying the image in an <img> tag
+            const imgElement = document.createElement("img");
+            imgElement.src = imageUrl;
+
+            // Append the img element to the participantsContainer
+            const participantsContainer = document.getElementById(
+              "participantsContainer"
+            );
+            const qrContainer = document.createElement("div");
+            qrContainer.id = "qrContainer";
+            qrContainer.style.display = "flex";
+            qrContainer.style.flexDirection = "column";
+            qrContainer.style.alignItems = "center";
+
+            qrContainer.classList.add("container");
+
+            var newFormHTML = `<div style="display: flex; flex-direction: column;align-items: center;">
+            <div>
+              <img
+                src="resQR-logo-design.png"
+                class="logo-size"
+                alt="resQR-logo"
+              />
+            </div>
+            <div>
+              <div style="text-align: center">
+                <h2> resQR Thanks you for Registering :)</h2>
+              </div>
+            </div>
+            <div><h4>Now your saftey is our responsibility</h4></div>
+          </div>`;
+
+            // Create a new div and set its innerHTML with the generated HTML
+            var newDiv = document.createElement("div");
+            newDiv.innerHTML = newFormHTML;
+
+            const qrImage = document.createElement("img");
+            qrImage.id = "qrImage";
+            qrImage.src = imageUrl;
+            qrImage.alt = "QR Code";
+            qrImage.setAttribute(
+              "onclick",
+              `navigateToEmergencyPage('${resQR_unique_key}')`
+            );
+
+            // Download Button
+            const downloadButton = document.createElement("button");
+            downloadButton.textContent = "Download the QR code";
+            downloadButton.setAttribute(
+              "onclick",
+              `downloadQR('${imageUrl}', 'C:\\Users\\Admin\\Downloads')`
+            );
+
+            // Append the elements to the container
+            qrContainer.appendChild(newDiv);
+            qrContainer.appendChild(qrImage);
+            qrContainer.appendChild(downloadButton);
+
+            // Append the container to the participantsContainer or any other container
+
+            participantsContainer.innerHTML = ""; // Clear existing content
+            participantsContainer.appendChild(qrContainer);
+
+            // Hide
+            const dependentDetailsForm = document.getElementById("myForm");
+            // dependentDetailsForm.style.display = "none";
+          } else {
+            console.error(
+              "Server responded with an error:",
+              response.statusText
+            );
+          }
+        } catch (error) {
+          console.error("Error calling generate_qr API:", error);
+        }
+      }
+
+      function navigateToEmergencyPage(data) {
+        // Replace 'new_page.html' with the desired destination
+        const destinationURL = "emergency_form.html";
+
+        // Make a GET request using the Fetch API
+        fetch(`/emergency?key=${encodeURIComponent(data)}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            // Add any additional headers if needed
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            // If the response is okay, navigate to the new page
+            window.location.href = `/emergency?key=${encodeURIComponent(data)}`;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+
+      function generateQRCode(inputText) {
+        const qrCodeContainer = document.getElementById("qrcode");
+
+        if (inputText.trim() !== "") {
+          // Generate QR code
+          qrcode.toCanvas(
+            { type: "image/png", value: inputText },
+            function (error, canvas) {
+              if (error) {
+                console.error("Error generating QR code:", error);
+                return;
+              }
+
+              // Clear previous QR code
+              qrCodeContainer.innerHTML = "";
+
+              // Append the new QR code to the container
+              qrCodeContainer.appendChild(canvas);
+            }
+          );
+        }
+      }
+
+      // const isPasswordValid = validatePassword();
+
+      // function isValid(password) {
+      //   if (password) {
+      //   } else {
+      //     alert("Password is invalid.");
+      //   }
+      // }
+
+      // function validatePassword() {
+      //   const password = document.getElementById("myInput").value;
+      //   // Minimum length check
+      //   if (password.length < 8) {
+      //     return false;
+      //   }
+
+      //   // Special character check
+      //   const specialCharacters = /[!@#$%^&*(),.?":{}|<>]/;
+      //   if (!specialCharacters.test(password)) {
+      //     alert("Password is invalid.");
+      //     return false;
+      //   }
+
+      //   // If all checks pass, the password is valid
+      //   return true;
+      // }
+
+      // // Example usage
+      // const passwordToCheck = "MyP@ssw0rd";
+      // const isValid = validatePassword(passwordToCheck);
+
+      function downloadQR(imageUrl, fileName) {
+        // Create a temporary anchor element
+        const anchor = document.createElement("a");
+        anchor.href = imageUrl;
+        anchor.download = fileName || "image"; // Default file name if not provided
+
+        // Simulate a click event to trigger the download
+        const event = new MouseEvent("click", {
+          bubbles: true,
+          cancelable: true,
+          view: window,
+        });
+
+        anchor.dispatchEvent(event);
+
+        // Remove the anchor element after the download
+        document.body.removeChild(anchor);
+      }
+    </script>
+  </body>
+</html>

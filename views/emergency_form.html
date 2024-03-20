@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>resQR Emergency</title>
+    <link rel="stylesheet" href="emergency_form.css" />
+  </head>
+  <body class="resQR-background">
+    <div class="container" id="emergencyForm" data-form-counter="1">
+      <div
+        class="form-step form-step-active"
+        style="display: flex; flex-direction: column"
+      >
+        <div class="emergency-heading-container">
+          <div class="logo">
+            <img
+              src="resQR-logo-design.png"
+              class="logo-size"
+              alt="resQR-logo"
+            />
+          </div>
+          <div class="emergency-heading">
+            <div style="text-align: center">
+              <h2>resQR Accident Assistance Form</h2>
+            </div>
+          </div>
+        </div>
+        <div id="emergency-form-questions">
+          <div>
+            <p>
+              Respond to these questions quickly so that we can help those who
+              have been affected in better and more formal terms.
+            </p>
+          </div>
+          <!-- Question 2 -->
+          <div style="display: flex; flex-direction: row">
+            <p>
+              1) Please allow us to capture the geo location of the accident.
+            </p>
+            <div>
+              <label class="switch">
+                <input type="checkbox" id="myToggle" onchange="getLocation()" />
+                <span class="slider round"></span>
+              </label>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <p>2) Are you the victim in the accident?</p>
+            <div style="display: flex; flex-direction: row; gap: 20px">
+              <div class="emergency-form-row">
+                <input
+                  style="height: 13px; margin: 3px"
+                  type="radio"
+                  name="victim"
+                  value="yes"
+                />
+                <p>Yes</p>
+              </div>
+              <div class="emergency-form-row">
+                <input
+                  style="height: 13px; margin: 3px"
+                  type="radio"
+                  name="victim"
+                  value="no"
+                />
+                <p>No, just a Bystander</p>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <p>3) According to you, how severe is the accident?</p>
+            <div style="display: flex; flex-direction: row; gap: 20px">
+              <div class="emergency-form-row">
+                <input
+                  style="height: 13px; margin: 3px"
+                  type="radio"
+                  name="severity"
+                  value="Minor"
+                />
+                <p>Minor</p>
+              </div>
+              <div class="emergency-form-row">
+                <input
+                  style="height: 13px; margin: 3px"
+                  type="radio"
+                  name="severity"
+                  value="moderate"
+                />
+                <p>Moderate</p>
+              </div>
+              <div class="emergency-form-row">
+                <input
+                  style="height: 13px; margin: 3px"
+                  type="radio"
+                  name="severity"
+                  value="serious"
+                />
+                <p>Serious</p>
+              </div>
+              <div class="emergency-form-row">
+                <input
+                  style="height: 13px; margin: 3px"
+                  type="radio"
+                  name="severity"
+                  value="critical"
+                />
+                <p>Critical</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question 4 -->
+          <div style="display: flex; flex-direction: column">
+            <p>4) Please enter the number of passengers affected.</p>
+            <input type="number" name="passenger_count" min="1" />
+          </div>
+          <p>
+            Thank you; We will notify the passenger's family and contact nearby
+            hospitals and police stations for assistance.
+          </p>
+          <button
+            type="submit"
+            id="submit-btn"
+            onclick="submitEmergencyAnswers()"
+          >
+            Submit
+          </button>
+        </div>
+        <div id="notification-sent" style="display: none">
+          <div
+            style="
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              gap: 20px;
+            "
+          >
+            <img src="green_tick.png" style="width: 50px" />
+            <h4 style="color: green">
+              THE FAMILY MEMBERS OF THE VICTIM HAVE BEEN NOTIFIED.
+            </h4>
+          </div>
+        </div>
+
+        <div id="table" style="display: none"></div>
+      </div>
+    </div>
+
+    <script>
+      let hospitalsList = null;
+      let policeStationsList = null;
+      let hospitalsDisplayList = [];
+      let policeStationsDisplayList = [];
+      let emailIdsList = [];
+      let accidentLatitude = null;
+      let accidentLongitude = null;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const currentURL = window.location.href;
+        let key = currentURL.split("?");
+        let uniqueKey = key[1].split("=");
+
+        fetch(`/getUserDetailsFromDatabase?key=${uniqueKey[1]}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const emailIds = [];
+            data.forEach((owner) => {
+              // Add owner's email id to the array
+              emailIds.push(owner.ownerEmailId);
+
+              // Loop through owner's dependents
+              owner.dependents.forEach((dependent) => {
+                // Add dependent's email id to the array
+                emailIds.push(dependent.dependentEmailId);
+              });
+            });
+            emailIdsList = emailIds;
+          })
+          .catch((error) => console.error("Error:", error));
+      });
+
+      function getLocation() {
+        var toggle = document.getElementById("myToggle");
+        if (toggle.checked) {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+          } else {
+            alert("Geolocation is not supported by this browser.");
+          }
+        }
+      }
+      function showPosition(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        let accidentLatitude = latitude;
+        let accidentLongitude = longitude;
+        const apiKey = "";
+        const radius = 5000; // 5000 meters (adjust as needed)
+        fetch(
+          `/hospitals?location=${latitude},${longitude}&radius=${radius}&types=hospital&key=${apiKey}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            hospitalsList = data;
+            let hospitals = hospitalsList["hospitals"];
+            for (let i = 0; i < hospitals.length; i++) {
+              const place = hospitals[i];
+
+              // Extract properties and create a new object
+              const hospital = {
+                latitude: place.geometry.location.lat,
+                longitude: place.geometry.location.lng,
+                name: place.name,
+                vicinity: place.vicinity,
+              };
+
+              // Push the new object to the processedPlaces array
+              hospitalsDisplayList.push(hospital);
+            }
+
+            console.log(hospitalsDisplayList);
+          })
+          .catch((error) => console.error("Error:", error));
+
+        fetch(
+          `/policeStations?location=${latitude},${longitude}&radius=${radius}&types=police&key=${apiKey}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            policeStationsList = data;
+            let policeStations = policeStationsList["policeStations"];
+            for (let i = 0; i < policeStations.length; i++) {
+              const place = policeStations[i];
+
+              // Extract properties and create a new object
+              const policeStation = {
+                latitude: place.geometry.location.lat,
+                longitude: place.geometry.location.lng,
+                name: place.name,
+                vicinity: place.vicinity,
+              };
+
+              // Push the new object to the processedPlaces array
+              policeStationsDisplayList.push(policeStation);
+            }
+            console.log(policeStationsDisplayList);
+          })
+          .catch((error) => console.error("Error:", error));
+
+        fetch(
+          `/getLocationName?location=${latitude},${longitude}&key=${apiKey}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+
+      function createHeading(text) {
+        const container = document.querySelector(".container");
+        const heading = document.createElement("h4");
+        heading.textContent = text;
+        container.appendChild(heading);
+      }
+
+      function createTable(data) {
+        // Create a table element
+
+        const table = document.createElement("table");
+
+        // Create the header row
+        const headerRow = table.insertRow();
+        for (const key in data[0]) {
+          const th = document.createElement("th");
+          th.textContent = key;
+          headerRow.appendChild(th);
+        }
+
+        // Create rows and cells for each JSON object
+        for (const obj of data) {
+          const row = table.insertRow();
+          for (const key in obj) {
+            const cell = row.insertCell();
+            cell.textContent = obj[key];
+          }
+        }
+        document.querySelector(".container").appendChild(table);
+      }
+
+      function submitEmergencyAnswers() {
+        // Collect form details
+        const isVictim = document.querySelector('input[name="victim"]:checked');
+        const severity = document.querySelector(
+          'input[name="severity"]:checked'
+        );
+        const passengerCount = document.querySelector(
+          'input[name="passenger_count"]'
+        ).value;
+
+        // Validate form details
+        if (!isVictim || !severity || passengerCount === "") {
+          alert("Please answer all questions.");
+          return;
+        }
+
+        // Gather the form details
+        const formData = {
+          isVictim: isVictim.value,
+          severity: severity.value,
+          passengerCount: parseInt(passengerCount, 10),
+          hospitalsList: hospitalsList,
+          policeStationsList: policeStationsList,
+        };
+        document.getElementById("emergency-form-questions").style.display =
+          "none";
+
+        document.getElementById("notification-sent").style.display = "block";
+
+        console.log(accidentLatitude, "-", accidentLongitude);
+        // send mail functionality
+        fetch(`/send_email`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ emailIdsList }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Server response:", data);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+
+        // get details from db and get all the details of the user
+        // and shoot a mail on press of submit button
+        createHeading("Nearby Hospital Details");
+        createTable(hospitalsDisplayList);
+
+        createHeading("Nearby Police Station Details");
+        createTable(policeStationsDisplayList);
+
+        // Add code to send the form data to your server if needed
+      }
+
+      function showError(error) {
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            alert("User denied the request for location.");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            alert("Location info is unavailable.");
+            break;
+          case error.TIMEOUT:
+            alert("The request to get user location timed out.");
+            break;
+          case error.UNKNOWN_ERROR:
+            alert("An error occurred.");
+            break;
+        }
+      }
+    </script>
+  </body>
+</html>

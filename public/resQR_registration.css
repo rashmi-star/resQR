@@ -1,0 +1,376 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+}
+body {
+  /* background: lightblue; */
+  /* background: #800080; */
+  /* background-color: #ff8c00; */
+  background-color: #00a86b;
+}
+.resQR-background {
+  background-image: url("caution.jpg");
+}
+.resQR-background::before {
+  position: absolute;
+  /* background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); 
+   */
+  /* Adjust the last value (alpha) to control the opacity */
+}
+
+.container {
+  width: 700px;
+  padding: 25px 35px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 10px;
+}
+.container p {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.container input {
+  width: 100%;
+  height: 50px;
+  border: 1px solid black;
+  outline: 0;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+}
+.container button {
+  width: 100%;
+  height: 50px;
+  /* background: #494eea; */
+  background: #ffd700;
+  /* color: #fff; */
+  color: black;
+  border: 0;
+  outline: 0;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  margin: 20px 0;
+  font-weight: 900;
+}
+.registration-heading-container {
+  height: 86.5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.registration-heading {
+  width: 89%;
+  align-self: center;
+}
+.logo {
+  width: 11%;
+  align-self: flex-end;
+}
+.logo-size {
+  /* width: 86.5px; */
+  width: 100px;
+}
+.owner_details {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+#imgBox {
+  width: 200px;
+  border-radius: 5px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 1s;
+}
+#imgBox img {
+  width: 100%;
+  padding: 10px;
+}
+#imgBox.show-img {
+  max-height: 300px;
+  margin: 10px auto;
+  border: 1px solid #d1d1d1;
+}
+.error {
+  animation: shake 0.1s linear 10;
+}
+
+.registration-form-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.registration-form-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.registration-form-equal-spacing {
+  width: 33.33%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.registration-form-gender,
+.registration-form-dob {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
+}
+.next {
+  width: 20%;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-2px);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  75% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/*----------Dependents styling------------*/
+
+.dependent-form {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  max-width: 600px;
+  position: absolute;
+}
+.dependent-input {
+  margin-bottom: 10px;
+}
+.disabled-form {
+  display: none;
+}
+.error-message {
+  color: red;
+}
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+}
+
+.resQR-background {
+  background-image: url("caution.jpg");
+  /* background: rgba(0, 0, 0, 0.5); */
+}
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Adjust the alpha (fourth parameter) to control the darkness */
+}
+.resQR-background::before {
+  position: absolute;
+  background-color: rgba(
+    0,
+    0,
+    0,
+    0.5
+  ); /* Adjust the last value (alpha) to control the opacity */
+}
+
+.container {
+  width: 700px;
+  padding: 25px 35px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 10px;
+}
+.container p {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+.container input {
+  width: 100%;
+  height: 50px;
+  border: 1px solid black;
+  outline: 0;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+}
+.container button {
+  width: 100%;
+  height: 50px;
+  /* background: #494eea; */
+  background: #ffd700;
+  /* color: #fff; */
+  color: black;
+  border: 0;
+  outline: 0;
+  border-radius: 5px;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  margin: 10px 0px 10px 0px;
+  font-weight: 700;
+  font-size: 15px;
+}
+.registration-heading-container {
+  height: 86.5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+.registration-heading {
+  width: 89%;
+  align-self: center;
+}
+.logo {
+  width: 11%;
+  align-self: flex-end;
+}
+.logo-size {
+  /* width: 86.5px; */
+  width: 100px;
+}
+
+.btn-add-dependents:hover {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--primary-color);
+}
+/* .owner_details {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+} */
+
+/* .dependent_details {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+} */
+#imgBox {
+  width: 200px;
+  border-radius: 5px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 1s;
+}
+#imgBox img {
+  width: 100%;
+  padding: 10px;
+}
+#imgBox.show-img {
+  max-height: 300px;
+  margin: 10px auto;
+  border: 1px solid #d1d1d1;
+}
+.error {
+  animation: shake 0.1s linear 10;
+}
+
+.registration-form-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.registration-form-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.registration-form-equal-spacing {
+  width: 33.33%;
+  align-items: center;
+  margin: 13px;
+}
+
+.registration-form-dependent-type {
+  width: 46%;
+  margin: 10px;
+  justify-content: flex-start;
+}
+
+.registration-form-gender,
+.registration-form-dob {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.next {
+  width: 30%;
+}
+
+.form-step {
+  display: none;
+  transition: animate 0.5s;
+}
+
+.form-step-active {
+  display: block;
+}
+
+@keyframes animate {
+  from {
+    transform: scale(1, 0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+}
+
+/*----------Dependents styling------------*/
+
+.dependent-form {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  max-width: 600px;
+  position: absolute;
+}
+.dependent-input {
+  margin-bottom: 10px;
+}
+.disabled-form {
+  display: none;
+}
+.error-message {
+  color: red;
+}
